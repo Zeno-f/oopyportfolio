@@ -1,0 +1,6 @@
+07:45,26-09-2018,Openen Soos
+13:33,27-09-2018,Dit was nu
+19:30,28-09-2018,Lezing: The wizard and the prophet
+12:00,03-11-2018,Deadline OOP
+12:00,13-11-2018,Verjaardag van Patrick
+00:01,01-01-2019,Nieuw Jaar
