@@ -6,12 +6,17 @@ from weatherstation import *
 class WeatherStationGUI(ttk.Frame):
     def __init__(self, master):
         super().__init__(master)
-        self.selected_location = 'Groningen'
+
+        data.selected_location = StringVar()
+        data.selected_location.set('Groningen')
 
         # creating 2 frames
         self.master = master
-        self.left_frame = WeatherStationLeft()
-        self.right_frame = WeatherStationRight()
+        try:
+            self.left_frame = WeatherStationLeft()
+            self.right_frame = WeatherStationRight()
+        except IndexError:
+            exit('No data from Buienradar to fill the feed')
 
         self.left_frame.grid(column=1, row=1, sticky=E)
         self.right_frame.grid(column=2, row=1, sticky=(N, W))
@@ -29,7 +34,8 @@ class WeatherStationWeerbeeld(ttk.Frame):
         super().__init__()
 
         for meetstation in data.feed['actual']['stationmeasurements']:
-            if meetstation['regio'] == 'Groningen':
+            if meetstation['regio'] == data.selected_location.get():
+                print(meetstation['regio'])
                 variable0 = str(meetstation['stationname']) + ", Netherlands"
                 variable1 = str(meetstation['rainFallLast24Hour']) + " mm in the last 24 hours"
                 variable2 = str(meetstation['sunpower']) + " W/m^2"
@@ -60,12 +66,15 @@ class WeatherStationWeerbeeld(ttk.Frame):
 
 
 class WeatherStationRight(ttk.Frame):
+    # TODO rewrite class to use StringVar() and textvariable=
     def __init__(self):
         super().__init__()
 
         # widgets for the right frame
         self.weather_pages = ttk.Notebook(self)
-        self.selected_location = 'Groningen'
+        self.selected_location = StringVar()
+        self.selected_location.set(data.selected_location)
+        self.selected_location.trace('w', self.location_changed)
 
         self.tab1 = WeatherStationWeerbeeld()
         self.tab2 = ttk.Frame(self.weather_pages)
@@ -83,6 +92,13 @@ class WeatherStationRight(ttk.Frame):
         self.weather_pages.add(self.tab4, text='tab three', compound='top')
         self.weather_pages.add(self.tab5, text='tab three', compound='top')
         self.weather_pages.add(self.tab6, text='tab three', compound='top')
+
+        data.selected_location.trace('w', self.location_changed)
+
+    def location_changed(self, *args, **kwargs):
+        self.weather_pages.forget(self.tab1)
+        self.tab1 = WeatherStationWeerbeeld()
+        self.weather_pages.add(self.tab1, text='Weerbeeld', compound='top')
 
 
 class WeatherStationLeft(ttk.Frame):
@@ -116,9 +132,9 @@ class WeatherStationLeft(ttk.Frame):
 
         self.max_temp.set(str(data.max_temperature[1]) + '°C')
         self.min_temp.set(str(data.min_temperature[1]) + '°C')
-        self.sunpower.set(str(data.max_sun[1]) + 'W/m²')
-        self.max_wind.set(str(data.max_wind[1]) + 'Bft')
-        self.min_wind.set(str(data.min_wind[1]) + 'Bft')
+        self.sunpower.set(str(data.max_sun[1]) + ' W/m²')
+        self.max_wind.set(str(data.max_wind[1]) + ' Bft')
+        self.min_wind.set(str(data.min_wind[1]) + ' Bft')
 
         # Creating widgets
         self.popup_menu = OptionMenu(self, self.location_selection, *data.meetstation_locations)
@@ -146,23 +162,23 @@ class WeatherStationLeft(ttk.Frame):
         # Placing the widgets in the layout
         self.popup_menu.grid(column=0, row=1, columnspan=2, sticky=(W, E))
 
-        self.max_temp_text.grid(column=0, row=3, columnspan=2, sticky='S')
+        self.max_temp_text.grid(column=0, row=3, columnspan=2, sticky='W')
         self.max_temp_text_w.grid(column=0, row=4, sticky='W')
         self.max_temp_text_o.grid(column=1, row=4, sticky='E')
 
-        self.min_temp_text.grid(column=0, row=5, columnspan=2, sticky='S')
+        self.min_temp_text.grid(column=0, row=5, columnspan=2, sticky='W')
         self.min_temp_text_w.grid(column=0, row=6, sticky='W')
         self.min_temp_text_o.grid(column=1, row=6, sticky='E')
 
-        self.sunpower_text.grid(column=0, row=7, columnspan=2, sticky='S')
+        self.sunpower_text.grid(column=0, row=7, columnspan=2, sticky='W')
         self.sunpower_text_w.grid(column=0, row=8, sticky='W')
         self.sunpower_text_o.grid(column=1, row=8, sticky='E')
 
-        self.max_wind_text.grid(column=0, row=9, columnspan=2, sticky='S')
+        self.max_wind_text.grid(column=0, row=9, columnspan=2, sticky='W')
         self.max_wind_text_w.grid(column=0, row=10, sticky='W')
         self.max_wind_text_o.grid(column=1, row=10, sticky='E')
 
-        self.min_wind_text.grid(column=0, row=11, columnspan=2, sticky='S')
+        self.min_wind_text.grid(column=0, row=11, columnspan=2, sticky='W')
         self.min_wind_text_w.grid(column=0, row=12, sticky='W')
         self.min_wind_text_o.grid(column=1, row=12, sticky='E')
 
@@ -185,8 +201,10 @@ class WeatherStationLeft(ttk.Frame):
 
     def change_dropdown(self, *args):
         self.selected_location = self.location_selection.get()
-        # update open tab
-        print(self.selected_location)
+        data.selected_location.set(self.selected_location)
+        # data.update_location(self.selected_location)
+
+
 
 
 # provides global access to the buienradar data

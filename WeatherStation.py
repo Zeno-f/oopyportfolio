@@ -26,6 +26,7 @@ class WeatherStation(Buienradar):
     def __init__(self):
         super().__init__()
         self.meetstation_locations = self.locations_list()
+        self.selected_location = 'Groningen'
         self.update_extremes()
 
     def netherlands_extreme_weather(self, weather_element, positive):
@@ -94,9 +95,10 @@ class WeatherStation(Buienradar):
         else:
             pass
         return meetstation_locations
-    
-    def get_feed(self):
-        return self.feed
+
+    def update_location(self, selected_location):
+        self.selected_location = selected_location
+        print(self.selected_location)
 
 
 def check_current():
