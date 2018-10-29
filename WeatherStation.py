@@ -4,14 +4,17 @@ import requests
 
 class Buienradar(object):
     def __init__(self):
-        print('super init')
         self.feed = self.request_weather_data()
         self.update_weather_data()
 
     def request_weather_data(self):
         """Requests buienradar data and returns it as a dictionary"""
-        response = requests.get("https://api.buienradar.nl/data/public/2.0/jsonfeed")
-        return json.loads(response.text)
+        try:
+            response = requests.get("https://apa.buienradar.nl/data/public/2.0/jsonfeed")
+        except requests.RequestException:
+            return 'no connection'
+        else:
+            return json.loads(response.text)
 
     def update_weather_data(self):
         self.feed = self.request_weather_data()
@@ -40,24 +43,27 @@ class WeatherStation(Buienradar):
             ['Eindhoven', 14.4]
         """
         weather_location = []
-        for value in self.feed['actual']['stationmeasurements']:
-            if value[weather_element] is None or value['regio'] == 'Noordzee':
-                pass
-            # Exception for stupid JSON Data, windspeedBft
-            elif int(value[weather_element]) is 0 and weather_element is 'windspeedBft':
-                pass
-            elif len(weather_location) == 0:
-                weather_location = [value['regio'], value[weather_element]]
-            elif positive is True:
-                if float(weather_location[1]) < float(value[weather_element]):
-                    weather_location = [value['regio'], value[weather_element]]
-                else:
+        if self.feed != 'no connection':
+            for value in self.feed['actual']['stationmeasurements']:
+                if value[weather_element] is None or value['regio'] == 'Noordzee':
                     pass
-            elif positive is False:
-                if float(weather_location[1]) > float(value[weather_element]):
-                    weather_location = [value['regio'], value[weather_element]]
-                else:
+                # Exception for stupid JSON Data, windspeedBft
+                elif int(value[weather_element]) is 0 and weather_element is 'windspeedBft':
                     pass
+                elif len(weather_location) == 0:
+                    weather_location = [value['regio'], value[weather_element]]
+                elif positive is True:
+                    if float(weather_location[1]) < float(value[weather_element]):
+                        weather_location = [value['regio'], value[weather_element]]
+                    else:
+                        pass
+                elif positive is False:
+                    if float(weather_location[1]) > float(value[weather_element]):
+                        weather_location = [value['regio'], value[weather_element]]
+                    else:
+                        pass
+        else:
+            pass
         return weather_location
 
     def update_extremes(self):
@@ -70,10 +76,12 @@ class WeatherStation(Buienradar):
 
     def locations_list(self):
         meetstation_locations = []
-        for meetstation in self.feed['actual']['stationmeasurements']:
-            if meetstation['regio'] == 'Noordzee':
-                pass
-            else:
-                meetstation_locations.append(meetstation['regio'])
-
+        if self.feed != 'no connection':
+            for meetstation in self.feed['actual']['stationmeasurements']:
+                if meetstation['regio'] == 'Noordzee':
+                    pass
+                else:
+                    meetstation_locations.append(meetstation['regio'])
+        else:
+            pass
         return meetstation_locations
