@@ -6,6 +6,7 @@ from weatherstation import *
 class WeatherStationGUI(ttk.Frame):
     def __init__(self, master):
         super().__init__(master)
+        self.selected_location = 'Groningen'
 
         # creating 2 frames
         self.master = master
@@ -26,6 +27,36 @@ class WeatherStationGUI(ttk.Frame):
 class WeatherStationWeerbeeld(ttk.Frame):
     def __init__(self):
         super().__init__()
+
+        for meetstation in data.feed['actual']['stationmeasurements']:
+            if meetstation['regio'] == self.selected_location:
+                variable0 = str(meetstation['stationname']) + ", Netherlands"
+                variable1 = str(meetstation['rainFallLast24Hour']) + " mm in the last 24 hours"
+                variable2 = str(meetstation['sunpower']) + " W/m^2"
+                variable3 = str(meetstation['airpressure']) + " hPa"
+                variable4 = str(meetstation['winddirectiondegrees']) + "°"
+                variable5 = str(meetstation['windspeedBft']) + " Bft"
+                variable6 = str(meetstation['windgusts']) + " km/h"
+                variable7 = str(meetstation['temperature']) + " °C"
+                variablex = str(meetstation['timestamp'])
+
+        # lay-out for a two by y grid for the data
+        ttk.Label(self, text="Stationname").grid(column=1, row=1, sticky=W)
+        ttk.Label(self, text=variable0).grid(column=2, row=1, sticky=E)
+        ttk.Label(self, text="Rainfall").grid(column=1, row=2, sticky=W)
+        ttk.Label(self, text=variable1).grid(column=2, row=2, sticky=E)
+        ttk.Label(self, text="Sun power").grid(column=1, row=3, sticky=W)
+        ttk.Label(self, text=variable2).grid(column=2, row=3, sticky=E)
+        ttk.Label(self, text="Air pressure").grid(column=1, row=4, sticky=W)
+        ttk.Label(self, text=variable3).grid(column=2, row=4, sticky=E)
+        ttk.Label(self, text="Wind-direction").grid(column=1, row=5, sticky=W)
+        ttk.Label(self, text=variable4).grid(column=2, row=5, sticky=E)
+        ttk.Label(self, text="Wind power").grid(column=1, row=6, sticky=W)
+        ttk.Label(self, text=variable5).grid(column=2, row=6, sticky=E)
+        ttk.Label(self, text="Wind gusts").grid(column=1, row=7, sticky=W)
+        ttk.Label(self, text=variable6).grid(column=2, row=7, sticky=E)
+        ttk.Label(self, text="Temperature").grid(column=1, row=8, sticky=W)
+        ttk.Label(self, text=variable7).grid(column=2, row=8, sticky=E)
 
 
 class WeatherStationRight(ttk.Frame):
