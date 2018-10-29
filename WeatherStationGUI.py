@@ -29,7 +29,7 @@ class WeatherStationWeerbeeld(ttk.Frame):
         super().__init__()
 
         for meetstation in data.feed['actual']['stationmeasurements']:
-            if meetstation['regio'] == self.selected_location:
+            if meetstation['regio'] == 'Groningen':
                 variable0 = str(meetstation['stationname']) + ", Netherlands"
                 variable1 = str(meetstation['rainFallLast24Hour']) + " mm in the last 24 hours"
                 variable2 = str(meetstation['sunpower']) + " W/m^2"
@@ -67,7 +67,7 @@ class WeatherStationRight(ttk.Frame):
         self.weather_pages = ttk.Notebook(self)
         self.selected_location = 'Groningen'
 
-        self.tab1 = ttk.Frame(self.weather_pages)
+        self.tab1 = WeatherStationWeerbeeld()
         self.tab2 = ttk.Frame(self.weather_pages)
         self.tab3 = ttk.Frame(self.weather_pages)
         self.tab4 = ttk.Frame(self.weather_pages)
@@ -166,6 +166,8 @@ class WeatherStationLeft(ttk.Frame):
         self.min_wind_text_w.grid(column=0, row=12, sticky='W')
         self.min_wind_text_o.grid(column=1, row=12, sticky='E')
 
+        self.update_max_min()
+
     def update_max_min(self):
         self.max_temp_location.set(data.max_temperature[0])
         self.min_temp_location.set(data.min_temperature[0])
@@ -179,7 +181,7 @@ class WeatherStationLeft(ttk.Frame):
         self.max_wind.set(str(data.max_wind[1]) + 'Bft')
         self.min_wind.set(str(data.min_wind[1]) + 'Bft')
 
-        self.after(10000, self.update_max_min())
+        self.after(10000, self.update_max_min)
 
     def change_dropdown(self, *args):
         self.selected_location = self.location_selection.get()
