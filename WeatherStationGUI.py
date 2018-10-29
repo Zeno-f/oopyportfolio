@@ -123,11 +123,16 @@ class WeatherStationGUI(ttk.Frame):
         print(self.selected_location)
 
 
+class LeftFrame(Tk):
+    def __init__(self):
+
+
+
 
 def main():
     root = Tk()
     root.title('Weatherstations Netherlands')
-    app = WeatherStationGUI(root, data)
+    app = WeatherStationGUI(root)
     app.mainloop()
 
 

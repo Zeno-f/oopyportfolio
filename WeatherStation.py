@@ -71,8 +71,8 @@ class WeatherStation(Buienradar):
         self.max_temperature = self.netherlands_extreme_weather('temperature', True)
         self.min_temperature = self.netherlands_extreme_weather('temperature', False)
         self.max_sun = self.netherlands_extreme_weather('sunpower', True)
-        self.max_windy = self.netherlands_extreme_weather('windspeedBft', True)
-        self.min_windy = self.netherlands_extreme_weather('windspeedBft', False)
+        self.max_wind = self.netherlands_extreme_weather('windspeedBft', True)
+        self.min_wind = self.netherlands_extreme_weather('windspeedBft', False)
 
     def locations_list(self):
         meetstation_locations = []
