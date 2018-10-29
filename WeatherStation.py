@@ -85,3 +85,6 @@ class WeatherStation(Buienradar):
         else:
             pass
         return meetstation_locations
+    
+    def get_feed(self):
+        return self.feed

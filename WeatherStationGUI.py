@@ -4,23 +4,59 @@ from weatherstation import *
 
 
 class WeatherStationGUI(ttk.Frame):
-    def __init__(self, master, data):
+    def __init__(self, master):
         super().__init__(master)
-        self.data = data
 
         # creating 2 frames
         self.master = master
-        self.left_frame = WeatherStationLeft(self.data)
-        # self.right_frame = WeatherStationRight()
+        self.left_frame = WeatherStationLeft()
+        self.right_frame = WeatherStationRight()
 
         self.left_frame.grid(column=1, row=1, sticky=E)
-        # self.right_frame.grid(column=2, row=1, sticky=(N, W))
+        self.right_frame.grid(column=2, row=1, sticky=(N, W))
+
+        self.__update_data__()
+
+    def __update_data__(self):
+        data.update_weather_data()
+        data.update_extremes()
+        self.after(10000, self.__update_data__)
+
+
+class WeatherStationWeerbeeld(ttk.Frame):
+    def __init__(self):
+        super().__init__()
+
+
+class WeatherStationRight(ttk.Frame):
+    def __init__(self):
+        super().__init__()
+
+        # widgets for the right frame
+        self.weather_pages = ttk.Notebook(self)
+        self.selected_location = 'Groningen'
+
+        self.tab1 = ttk.Frame(self.weather_pages)
+        self.tab2 = ttk.Frame(self.weather_pages)
+        self.tab3 = ttk.Frame(self.weather_pages)
+        self.tab4 = ttk.Frame(self.weather_pages)
+        self.tab5 = ttk.Frame(self.weather_pages)
+        self.tab6 = ttk.Frame(self.weather_pages)
+
+        # layout for the right frame
+        self.weather_pages.grid(row=1, column=1, sticky=(W, N, E, S))
+
+        self.weather_pages.add(self.tab1, text='Weerbeeld', compound='top')
+        self.weather_pages.add(self.tab2, text='tab two', compound='top')
+        self.weather_pages.add(self.tab3, text='tab three', compound='top')
+        self.weather_pages.add(self.tab4, text='tab three', compound='top')
+        self.weather_pages.add(self.tab5, text='tab three', compound='top')
+        self.weather_pages.add(self.tab6, text='tab three', compound='top')
 
 
 class WeatherStationLeft(ttk.Frame):
-    def __init__(self, data):
+    def __init__(self):
         super().__init__()
-        self.data = data
 
         # StringVars to update labels
         self.location_selection = StringVar()
@@ -41,20 +77,20 @@ class WeatherStationLeft(ttk.Frame):
         self.location_selection.set('Locatie')
         self.location_selection.trace('w', self.change_dropdown)
 
-        self.max_temp_location.set(self.data.max_temperature[0])
-        self.min_temp_location.set(self.data.min_temperature[0])
-        self.sunpower_location.set(self.data.max_sun[0])
-        self.max_wind_location.set(self.data.max_wind[0])
-        self.min_wind_location.set(self.data.min_wind[0])
+        self.max_temp_location.set(data.max_temperature[0])
+        self.min_temp_location.set(data.min_temperature[0])
+        self.sunpower_location.set(data.max_sun[0])
+        self.max_wind_location.set(data.max_wind[0])
+        self.min_wind_location.set(data.min_wind[0])
 
-        self.max_temp.set(str(self.data.max_temperature[1]) + '°C')
-        self.min_temp.set(str(self.data.min_temperature[1]) + '°C')
-        self.sunpower.set(str(self.data.max_sun[1]) + 'W/m²')
-        self.max_wind.set(str(self.data.max_wind[1]) + 'Bft')
-        self.min_wind.set(str(self.data.min_wind[1]) + 'Bft')
+        self.max_temp.set(str(data.max_temperature[1]) + '°C')
+        self.min_temp.set(str(data.min_temperature[1]) + '°C')
+        self.sunpower.set(str(data.max_sun[1]) + 'W/m²')
+        self.max_wind.set(str(data.max_wind[1]) + 'Bft')
+        self.min_wind.set(str(data.min_wind[1]) + 'Bft')
 
         # Creating widgets
-        self.popup_menu = OptionMenu(self, self.location_selection, *self.data.meetstation_locations)
+        self.popup_menu = OptionMenu(self, self.location_selection, *data.meetstation_locations)
 
         self.max_temp_text = ttk.Label(self, text='Highest temperature', padding='2 2 2 0')
         self.max_temp_text_w = ttk.Label(self, textvariable=self.max_temp_location)
@@ -99,43 +135,35 @@ class WeatherStationLeft(ttk.Frame):
         self.min_wind_text_w.grid(column=0, row=12, sticky='W')
         self.min_wind_text_o.grid(column=1, row=12, sticky='E')
 
+    def update_max_min(self):
+        self.max_temp_location.set(data.max_temperature[0])
+        self.min_temp_location.set(data.min_temperature[0])
+        self.sunpower_location.set(data.max_sun[0])
+        self.max_wind_location.set(data.max_wind[0])
+        self.min_wind_location.set(data.min_wind[0])
+
+        self.max_temp.set(str(data.max_temperature[1]) + '°C')
+        self.min_temp.set(str(data.min_temperature[1]) + '°C')
+        self.sunpower.set(str(data.max_sun[1]) + 'W/m²')
+        self.max_wind.set(str(data.max_wind[1]) + 'Bft')
+        self.min_wind.set(str(data.min_wind[1]) + 'Bft')
+
+        self.after(10000, self.update_max_min())
+
     def change_dropdown(self, *args):
         self.selected_location = self.location_selection.get()
         # update open tab
         print(self.selected_location)
 
 
-class WeatherStationRight(ttk.Frame):
-    def __init__(self):
-        super().__init__()
-
-        # widgets for the right frame
-        self.weather_pages = ttk.Notebook(self.right_frame)
-        self.selected_location = 'Groningen'
-
-        self.tab1 = ttk.Frame(self.weather_pages)
-        self.tab2 = ttk.Frame(self.weather_pages)
-        self.tab3 = ttk.Frame(self.weather_pages)
-        self.tab4 = ttk.Frame(self.weather_pages)
-        self.tab5 = ttk.Frame(self.weather_pages)
-        self.tab6 = ttk.Frame(self.weather_pages)
-
-        # layout for the right frame
-        self.weather_pages.grid(row=1, column=1, sticky=(W, N, E, S))
-
-        self.weather_pages.add(self.tab1, text='Weerbeeld', compound='top')
-        self.weather_pages.add(self.tab2, text='tab two', compound='top')
-        self.weather_pages.add(self.tab3, text='tab three', compound='top')
-        self.weather_pages.add(self.tab4, text='tab three', compound='top')
-        self.weather_pages.add(self.tab5, text='tab three', compound='top')
-        self.weather_pages.add(self.tab6, text='tab three', compound='top')
+# provides global access to the buienradar data
+data = WeatherStation()
 
 
 def main():
     root = Tk()
     root.title('Weatherstation Netherlands')
-    data = WeatherStation()
-    app = WeatherStationGUI(root, data)
+    app = WeatherStationGUI(root)
     app.mainloop()
 
 
