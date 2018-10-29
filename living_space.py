@@ -5,6 +5,7 @@ Created on Wed Sep 19 12:34:51 2018
 @author: Zeno
 """
 
+
 class floor:
     """ Calculates the surface area
     
@@ -26,7 +27,8 @@ class floor:
     
     def __str__(self):
         return str(self.area) + " m2"
-        
+
+
 class room(floor):
     def __init__(self, length, width, height):
         super().__init__(length, width)
@@ -39,6 +41,7 @@ class room(floor):
     def __str__(self):
         return str(self.space) + " m3"
     
+
 class living_space_interface:
     def ask_input_1():
         menu = ["What are the measurements of the room?",
@@ -64,6 +67,7 @@ class living_space_interface:
             print("The room has a living area of ", room_1.area, "m2")
             print("and a living space of ", room_1)
             return
+
 
 if __name__ == "__main__":
     print('\nTo run this program, run portfolio.py and select the correct program')

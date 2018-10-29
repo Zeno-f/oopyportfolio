@@ -23,6 +23,7 @@ class WeatherStationGUI(ttk.Frame):
 
     def __init__(self, master):
         super().__init__(master)
+        data = WeatherStation()
 
         """for debugging. Adding backgrounds to different objects to recognize the space they take"""
         self.s = ttk.Style()
@@ -41,7 +42,7 @@ class WeatherStationGUI(ttk.Frame):
         self.location_selection = StringVar()
         self.location_selection.set('Locatie')
         self.location_selection.trace('w', self.change_dropdown)
-        self.extreme_weather = MaximumValues()
+        self.extreme_weather = data.MaximumValues()
         # self.max_temp_str = ('\nHoogste temperatuur:\n' + self.extreme_weather.max_temperature[0] + ' ' +
         #                 str(self.extreme_weather.max_temperature[1]) + ' °C')
         # self.min_temp_str = ('Laagste temperatuur:\n' + self.extreme_weather.min_temperature[0] + ' ' +
@@ -116,20 +117,18 @@ class WeatherStationGUI(ttk.Frame):
         print('done update')
         self.after(10000, self.display_min_max)
 
-
     def change_dropdown(self, *args):
         self.selected_location = self.location_selection.get()
         # update open tab
         print(self.selected_location)
 
 
+
 def main():
-    pass
-    # buienradar_feed = Buienradar.data
-    # root = Tk()
-    # root.title('Weatherstations Netherlands')
-    # app = WeatherStationGUI(root)
-    # app.mainloop()
+    root = Tk()
+    root.title('Weatherstations Netherlands')
+    app = WeatherStationGUI(root, data)
+    app.mainloop()
 
 
 if __name__ == "__main__":

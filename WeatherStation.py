@@ -10,7 +10,7 @@ class Buienradar(object):
     def request_weather_data(self):
         """Requests buienradar data and returns it as a dictionary"""
         try:
-            response = requests.get("https://apa.buienradar.nl/data/public/2.0/jsonfeed")
+            response = requests.get("https://api.buienradar.nl/data/public/2.0/jsonfeed")
         except requests.RequestException:
             return 'no connection'
         else:
