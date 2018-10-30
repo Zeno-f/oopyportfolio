@@ -107,7 +107,7 @@ class WeatherstationTemperatureCurrent(ttk.Frame):
     def __init__(self):
         super.__init__()
 
-        
+
 
 
 class WeatherStationRight(ttk.Frame):
@@ -248,6 +248,7 @@ def main():
     root = Tk()
     root.title('Weatherstation Netherlands')
     app = WeatherStationGUI(root)
+    graph_temperature_current = animation.FuncAnimation(f, animate, interval=1000)
     app.mainloop()
 
 

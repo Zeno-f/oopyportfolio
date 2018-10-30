@@ -2,6 +2,7 @@ import json
 import requests
 import time
 import datetime
+import matplotlib
 
 
 class Buienradar(object):
@@ -19,6 +20,7 @@ class Buienradar(object):
             return json.loads(response.text)
 
     def update_weather_data(self):
+        """This function can be called to update the feed"""
         self.feed = self.request_weather_data()
 
 
