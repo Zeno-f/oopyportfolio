@@ -33,43 +33,81 @@ class WeatherStationWeerbeeld(ttk.Frame):
     def __init__(self):
         super().__init__()
 
+        self.variable0 = StringVar()
+        self.variable1 = StringVar()
+        self.variable2 = StringVar()
+        self.variable3 = StringVar()
+        self.variable4 = StringVar()
+        self.variable5 = StringVar()
+        self.variable6 = StringVar()
+        self.variable7 = StringVar()
+        self.variable8 = StringVar()
+        self.variable9 = StringVar()
+        self.variablex = StringVar()
+
         for meetstation in data.feed['actual']['stationmeasurements']:
             if meetstation['regio'] == data.selected_location.get():
-                variable0 = str(meetstation['stationname']) + ", Netherlands"
-                variable1 = str(meetstation['rainFallLast24Hour']) + " mm in the last 24 hours"
-                variable2 = str(meetstation['sunpower']) + " W/m^2"
-                variable3 = str(meetstation['airpressure']) + " hPa"
-                variable4 = str(meetstation['winddirectiondegrees']) + "°"
-                variable5 = str(meetstation['windspeedBft']) + " Bft"
-                variable6 = str(meetstation['windgusts']) + " km/h"
-                variable7 = str(meetstation['temperature']) + " °C"
-                variable8 = str(meetstation['groundtemperature']) + " °C"
-                variable9 = str(meetstation['feeltemperature']) + " °C"
-                variablex = str(meetstation['timestamp'])
+                self.variable0.set(str(meetstation['stationname']) + ", Netherlands")
+                self.variable1.set(str(meetstation['rainFallLast24Hour']) + " mm in the last 24 hours")
+                self.variable2.set(str(meetstation['sunpower']) + " W/m^2")
+                self.variable3.set(str(meetstation['airpressure']) + " hPa")
+                self.variable4.set(str(meetstation['winddirectiondegrees']) + "°")
+                self.variable5.set(str(meetstation['windspeedBft']) + " Bft")
+                self.variable6.set(str(meetstation['windgusts']) + " km/h")
+                self.variable7.set(str(meetstation['temperature']) + " °C")
+                self.variable8.set(str(meetstation['groundtemperature']) + " °C")
+                self.variable9.set(str(meetstation['feeltemperature']) + " °C")
+                self.variablex.set(str(meetstation['timestamp']))
 
             # lay-out for a two by y grid for the data
         ttk.Label(self, text="Stationname").grid(column=1, row=1, sticky=W)
-        ttk.Label(self, text=variable0).grid(column=2, row=1, sticky=E)
+        ttk.Label(self, textvariable=self.variable0).grid(column=2, row=1, sticky=E)
         ttk.Label(self, text="Rainfall").grid(column=1, row=2, sticky=W)
-        ttk.Label(self, text=variable1).grid(column=2, row=2, sticky=E)
+        ttk.Label(self, textvariable=self.variable1).grid(column=2, row=2, sticky=E)
         ttk.Label(self, text="Sun power").grid(column=1, row=3, sticky=W)
-        ttk.Label(self, text=variable2).grid(column=2, row=3, sticky=E)
+        ttk.Label(self, textvariable=self.variable2).grid(column=2, row=3, sticky=E)
         ttk.Label(self, text="Air pressure").grid(column=1, row=4, sticky=W)
-        ttk.Label(self, text=variable3).grid(column=2, row=4, sticky=E)
+        ttk.Label(self, textvariable=self.variable3).grid(column=2, row=4, sticky=E)
         ttk.Label(self, text="Wind-direction").grid(column=1, row=5, sticky=W)
-        ttk.Label(self, text=variable4).grid(column=2, row=5, sticky=E)
+        ttk.Label(self, textvariable=self.variable4).grid(column=2, row=5, sticky=E)
         ttk.Label(self, text="Wind power").grid(column=1, row=6, sticky=W)
-        ttk.Label(self, text=variable5).grid(column=2, row=6, sticky=E)
+        ttk.Label(self, textvariable=self.variable5).grid(column=2, row=6, sticky=E)
         ttk.Label(self, text="Wind gusts").grid(column=1, row=7, sticky=W)
-        ttk.Label(self, text=variable6).grid(column=2, row=7, sticky=E)
+        ttk.Label(self, textvariable=self.variable6).grid(column=2, row=7, sticky=E)
         ttk.Label(self, text="Temperature").grid(column=1, row=8, sticky=W)
-        ttk.Label(self, text=variable7).grid(column=2, row=8, sticky=E)
+        ttk.Label(self, textvariable=self.variable7).grid(column=2, row=8, sticky=E)
         ttk.Label(self, text="groundtemperature").grid(column=1, row=9, sticky=W)
-        ttk.Label(self, text=variable8).grid(column=2, row=9, sticky=E)
+        ttk.Label(self, textvariable=self.variable8).grid(column=2, row=9, sticky=E)
         ttk.Label(self, text="feeltemperature").grid(column=1, row=10, sticky=W)
-        ttk.Label(self, text=variable9).grid(column=2, row=10, sticky=E)
+        ttk.Label(self, textvariable=self.variable9).grid(column=2, row=10, sticky=E)
         ttk.Label(self, text="Last update").grid(column=1, row=11, sticky=W)
-        ttk.Label(self, text=variablex).grid(column=2, row=11, sticky=E)
+        ttk.Label(self, textvariable=self.variablex).grid(column=2, row=11, sticky=E)
+
+        data.selected_location.trace('w', self.location_changed)
+
+    def location_changed(self, *args, **kwargs):
+        for meetstation in data.feed['actual']['stationmeasurements']:
+            if meetstation['regio'] == data.selected_location.get():
+                self.variable0.set(str(meetstation['stationname']) + ", Netherlands")
+                self.variable1.set(str(meetstation['rainFallLast24Hour']) + " mm in the last 24 hours")
+                self.variable2.set(str(meetstation['sunpower']) + " W/m^2")
+                self.variable3.set(str(meetstation['airpressure']) + " hPa")
+                self.variable4.set(str(meetstation['winddirectiondegrees']) + "°")
+                self.variable5.set(str(meetstation['windspeedBft']) + " Bft")
+                self.variable6.set(str(meetstation['windgusts']) + " km/h")
+                self.variable7.set(str(meetstation['temperature']) + " °C")
+                self.variable8.set(str(meetstation['groundtemperature']) + " °C")
+                self.variable9.set(str(meetstation['feeltemperature']) + " °C")
+                self.variablex.set(str(meetstation['timestamp']))
+
+        self.after(10000, self.location_changed)
+
+
+class WeatherstationTemperatureCurrent(ttk.Frame):
+    def __init__(self):
+        super.__init__()
+
+        
 
 
 class WeatherStationRight(ttk.Frame):
@@ -79,9 +117,6 @@ class WeatherStationRight(ttk.Frame):
 
         # widgets for the right frame
         self.weather_pages = ttk.Notebook(self)
-        self.selected_location = StringVar()
-        self.selected_location.set(data.selected_location)
-        self.selected_location.trace('w', self.location_changed)
 
         self.tab1 = WeatherStationWeerbeeld()
         self.tab2 = ttk.Frame(self.weather_pages)
@@ -99,13 +134,6 @@ class WeatherStationRight(ttk.Frame):
         self.weather_pages.add(self.tab4, text='tab three', compound='top')
         self.weather_pages.add(self.tab5, text='tab three', compound='top')
         self.weather_pages.add(self.tab6, text='tab three', compound='top')
-
-        data.selected_location.trace('w', self.location_changed)
-
-    def location_changed(self, *args, **kwargs):
-        self.weather_pages.forget(self.tab1)
-        self.tab1 = WeatherStationWeerbeeld()
-        self.weather_pages.add(self.tab1, text='Weerbeeld', compound='top')
 
 
 class WeatherStationLeft(ttk.Frame):
