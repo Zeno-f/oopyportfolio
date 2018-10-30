@@ -99,19 +99,3 @@ class WeatherStation(Buienradar):
     def update_location(self, selected_location):
         self.selected_location = selected_location
         print(self.selected_location)
-
-
-def check_current():
-    time_now = datetime.datetime(*time.localtime()[:6])
-    x = WeatherStation()
-    for y in x.feed['actual']['stationmeasurements']:
-        time_stamp = time.strptime(y, "%Y-%m-%dT%H:%M:%S")
-        time_stamp = datetime.datetime(*time_stamp[:6])
-        time_diff = time_now - time_stamp
-        if time_diff > datetime.timedelta(hours=1):
-            pass
-            # dont do stuff
-
-# old_date = time.strptime(old_line[0] + ' ' + old_line[1], "%H:%M %d-%m-%Y")
-# old_date = datetime.datetime(*old_date[:6])
-# difference_date = old_date - convert_date[0]

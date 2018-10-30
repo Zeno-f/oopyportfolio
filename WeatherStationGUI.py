@@ -35,7 +35,6 @@ class WeatherStationWeerbeeld(ttk.Frame):
 
         for meetstation in data.feed['actual']['stationmeasurements']:
             if meetstation['regio'] == data.selected_location.get():
-                print(meetstation['regio'])
                 variable0 = str(meetstation['stationname']) + ", Netherlands"
                 variable1 = str(meetstation['rainFallLast24Hour']) + " mm in the last 24 hours"
                 variable2 = str(meetstation['sunpower']) + " W/m^2"
@@ -44,9 +43,11 @@ class WeatherStationWeerbeeld(ttk.Frame):
                 variable5 = str(meetstation['windspeedBft']) + " Bft"
                 variable6 = str(meetstation['windgusts']) + " km/h"
                 variable7 = str(meetstation['temperature']) + " °C"
+                variable8 = str(meetstation['groundtemperature']) + " °C"
+                variable9 = str(meetstation['feeltemperature']) + " °C"
                 variablex = str(meetstation['timestamp'])
 
-        # lay-out for a two by y grid for the data
+            # lay-out for a two by y grid for the data
         ttk.Label(self, text="Stationname").grid(column=1, row=1, sticky=W)
         ttk.Label(self, text=variable0).grid(column=2, row=1, sticky=E)
         ttk.Label(self, text="Rainfall").grid(column=1, row=2, sticky=W)
@@ -63,6 +64,12 @@ class WeatherStationWeerbeeld(ttk.Frame):
         ttk.Label(self, text=variable6).grid(column=2, row=7, sticky=E)
         ttk.Label(self, text="Temperature").grid(column=1, row=8, sticky=W)
         ttk.Label(self, text=variable7).grid(column=2, row=8, sticky=E)
+        ttk.Label(self, text="groundtemperature").grid(column=1, row=9, sticky=W)
+        ttk.Label(self, text=variable8).grid(column=2, row=9, sticky=E)
+        ttk.Label(self, text="feeltemperature").grid(column=1, row=10, sticky=W)
+        ttk.Label(self, text=variable9).grid(column=2, row=10, sticky=E)
+        ttk.Label(self, text="Last update").grid(column=1, row=11, sticky=W)
+        ttk.Label(self, text=variablex).grid(column=2, row=11, sticky=E)
 
 
 class WeatherStationRight(ttk.Frame):
@@ -203,8 +210,6 @@ class WeatherStationLeft(ttk.Frame):
         self.selected_location = self.location_selection.get()
         data.selected_location.set(self.selected_location)
         # data.update_location(self.selected_location)
-
-
 
 
 # provides global access to the buienradar data
